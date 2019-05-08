@@ -1,13 +1,14 @@
+#!/bin/sh
 # Purpose: shaded relief grid raster map from the ETOPO1 from 1 arc minute global data set (here: Kuril-Kamchatka Trench)
 # GMT modules: grdcut, makecpt, grdgradient, grdimage, grdcontour, psscale, gmtlogo
 # Step-1. Extract a subset of ETOPO1m for the Kuril-Kamchatka Trench area 
 grdcut earth_relief_01m.grd -R140/170/40/60 -Gkkt_relief.nc
 # Step-2. Make color palette 
-gmt makecpt -Crainbow -T-10000/1000/500 -Z > topo.cpt
+gmt makecpt -Cglobe.cpt -V -T-10000/1000 > myocean.cpt
 # Step-3. Make raster image
-gmt grdimage kkt_relief.nc -Ctopo.cpt -R140/170/40/60 -JM6i -P -I+a15+ne0.75 -Xc -K > BathymetryKKT.ps
+gmt grdimage kkt_relief.nc -Cmyocean.cpt -R140/170/40/60 -JM6i -P -I+a15+ne0.75 -Xc -K > BathymetryKKT.ps
 # Step-4. Add legend
-gmt psscale -Dg135/40+w6i/0.15i+v+o0.2/0i -Rkkt_relief.nc -J -Ctopo.cpt \
+gmt psscale -Dg135/40+w6i/0.15i+v+o0.2/0i -Rkkt_relief.nc -J -Cmyocean.cpt \
 	--FONT_ANNOT_PRIMARY=6p,Helvetica,dimgray -I0.2 -By+lm -O -K >> BathymetryKKT.ps	
 # Step-5. Add shorelines
 gmt grdcontour kkt_relief.nc -R -J -C1000 -O -K >> BathymetryKKT.ps
