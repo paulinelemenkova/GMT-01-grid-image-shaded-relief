@@ -1,31 +1,23 @@
 # Purpose: shaded relief grid raster map from the ETOPO1 from 1 arc minute global data set (here: Kuril-Kamchatka Trench)
 # GMT modules: grdcut, makecpt, grdgradient, grdimage, grdcontour, psscale, gmtlogo
-	#5 min-grid color image: 
-gmt grdcut earth_relief_05m.grd -R140/170/40/60 -Gkkt_relief.nc
-gmt makecpt -Crainbow -T-10000/1000/500 -Z > topo.cpt
-gmt grdimage @kkt_relief.nc -JM6i -P -Ba -Ctopo.cpt -V -K > GMT_KKTrelief.ps
-gmt psscale -DjTC+w5i/0.25i+h+o0/-1i -Rkkt_relief.nc -J -Ctopo.cpt -I0.4 -By+lm -O >> GMT_KKTrelief.ps
-	#5 arc min-grid global relief (ETOPO1) shaded relief: 
-gmt grdgradient @kkt_relief.nc -Ne0.8 -A100 -fg -Gus_i.nc
-gmt grdimage @kkt_relief.nc -Ius_i.nc -JM6i -P -Ba -Ctopo.cpt -K > GMT_KKTreliefTry.ps
-gmt psscale -DjTC+w5i/0.25i+h+o0/-1i -Rkkt_relief.nc -J -Ctopo.cpt -I0.4 -By+lm -O -K >> GMT_KKTreliefTry.ps
-gmt logo -Dx6/-2.2+o0.1i/0.1i+w2c -O >> GMT_KKTreliefTry.ps
-	#1 arc min-grid global relief (ETOPO1) color image:
+# Step-1. Extract a subset of ETOPO1m for the Kuril-Kamchatka Trench area 
 grdcut earth_relief_01m.grd -R140/170/40/60 -Gkkt_relief.nc
+# Step-2. Make color palette 
 gmt makecpt -Crainbow -T-10000/1000/500 -Z > topo.cpt
-gmt grdimage @kkt_relief.nc -JM6i -P -Ba -Ctopo.cpt -V -K > GMT_KKTrelief01.ps
-gmt psscale -DjTC+w5i/0.25i+h+o0/-1i -Rkkt_relief.nc -J -Ctopo.cpt -I0.4 -By+lm -O >> GMT_KKTrelief01.ps
-	#1 min-grid shaded relief: 
-grdcut earth_relief_01m.grd -R140/170/40/60 -Gkkt_relief.nc
-gmt makecpt -Crainbow -T-10000/1000/500 -Z > topo.cpt
-gmt grdgradient @kkt_relief.nc -Ne0.8 -A100 -fg -Gus_i.nc
-gmt grdimage @kkt_relief.nc -Ius_i.nc -JM6i -Ba -Ctopo.cpt \
+# Step-3. Make raster image
+gmt grdimage kkt_relief.nc -Ctopo.cpt -R140/170/40/60 -JM6i -P -I+a15+ne0.75 -Xc -K > BathymetryKKT.ps
+# Step-4. Add legend
+gmt psscale -Dg135/40+w6i/0.15i+v+o0.2/0i -Rkkt_relief.nc -J -Ctopo.cpt \
+	--FONT_ANNOT_PRIMARY=6p,Helvetica,dimgray -I0.2 -By+lm -O -K >> BathymetryKKT.ps	
+# Step-5. Add shorelines
+gmt grdcontour kkt_relief.nc -R -J -C1000 -O -K >> BathymetryKKT.ps
+# Step-6. Add grid
+gmt psbasemap -R -J \
+	--FORMAT_GEO_MAP=dddF \
+	--MAP_FRAME_PEN=dimgray --MAP_FRAME_WIDTH=0.1c \
 	--FONT_ANNOT_PRIMARY=7p,Helvetica,dimgray \
 	--FONT_TITLE=12p,Helvetica,dimgray \
-	--MAP_FRAME_WIDTH=0.08c --MAP_FRAME_PEN=dimgray \
-	--FORMAT_GEO_MAP=dddF \
-	-U -B+t"Bathymetry of the Kuril-Kamchatka Trench: shaded relief of the 1 arc minute global data set (ETOPO1)" \
-	-P -K > GMT_KKTrelief01m.ps
-gmt psscale -Dg135/40+w6i/0.15i+v+o0.2/0i -Rkkt_relief.nc -J -Ctopo.cpt \
-	--FONT_ANNOT_PRIMARY=6p,Helvetica,dimgray -I0.2 -By+lm -O -K >> GMT_KKTrelief01m.ps	
-gmt logo -Dx6.2/-2.2+o0.1i/0.1i+w2c -O >> GMT_KKTrelief01m.ps
+	-Bxg4a4f2 -Byg4a4f2 \
+	-B+t"Bathymetry of the Kuril-Kamchatka Trench: 1 arc min ETOPO1 Global Relief Model" -O -K >> BathymetryKKT.ps
+# Step-7. Add GMT logo
+gmt logo -Dx6.2/-2.2+o0.1i/0.1i+w2c -O >> BathymetryKKT.ps
