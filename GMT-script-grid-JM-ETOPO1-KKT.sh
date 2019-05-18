@@ -24,12 +24,13 @@ gmt psbasemap -R -J \
 	--MAP_FRAME_WIDTH=0.1c \
     --MAP_TITLE_OFFSET=1c \
 	--MAP_TICK_PEN_PRIMARY=thinner,dimgray \
-    --MAP_GRID_PEN_PRIMARY=thinner,white \
+    --MAP_GRID_PEN_PRIMARY=thin,white \
+    --MAP_GRID_PEN_SECONDARY=thinnest,white \
 	--FONT_TITLE=12p,Palatino-Roman,black \
 	--FONT_ANNOT_PRIMARY=7p,Helvetica,dimgray \
 	--FONT_LABEL=7p,Helvetica,dimgray \
-	-Bxg4f2a4 -Byg4f2a4 \
-	-B+t"Bathymetry of the Kuril-Kamchatka Trench and coastal land topography" -O -K >> $ps
+    -Bpxg8f2a4 -Bpyg6f3a3 -Bsxg4 -Bsyg3 \
+    -B+t"Bathymetry of the Kuril-Kamchatka Trench and coastal land topography" -O -K >> $ps
 # Step-8. Add scale, directional rose
 gmt psbasemap -R -J \
     --FONT=8p,Palatino-Roman,dimgray \
@@ -44,3 +45,5 @@ gmt pstext -R0/10/0/15 -JX10/10 -X0.5c -Y7.1c -N -O \
     -F+f10p,Palatino-Roman,black+jLB >> $ps << EOF
 3.0 15.0 ETOPO1 Global Relief Model 1 arc min resolution grid
 EOF
+# сетка с одинаковыми линиями
+#    -Bxg4f2a4 -Byg4f2a4
