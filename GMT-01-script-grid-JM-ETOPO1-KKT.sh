@@ -1,9 +1,9 @@
 #!/bin/sh
 # Purpose: shaded relief grid raster map from the ETOPO1 from 1 arc minute global data set (here: Kuril-Kamchatka Trench)
-# GMT modules: grdcut, makecpt, grdimage, psscale, grdcontour, psbasemap, gmtlogo, psconvert
+# GMT modules: gmtset, grdcut, makecpt, grdimage, psscale, grdcontour, psbasemap, gmtlogo, psconvert
 # Step-1. Generate a file
 ps=BathymetryKKT.ps
-# Step-2. set parameters
+# Step-2. GMT set up
 gmt set FORMAT_GEO_MAP=dddF \
     MAP_FRAME_PEN=dimgray \
     MAP_FRAME_WIDTH=0.1c \
